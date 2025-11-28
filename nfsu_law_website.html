@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFSU School of Law - Academic Research Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .tagline {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        nav {
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-content a {
+            text-decoration: none;
+            color: #333;
+            padding: 1rem 0;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav-content a:hover, .nav-content a.active {
+            color: #16213e;
+            border-bottom-color: #16213e;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            border-radius: 10px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .card-category {
+            background: #667eea;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .card-date {
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        .card h3 {
+            color: #1a1a2e;
+            margin-bottom: 0.75rem;
+            font-size: 1.3rem;
+        }
+
+        .card p {
+            color: #64748b;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .card-author {
+            color: #475569;
+            font-size: 0.9rem;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .card-footer {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .search-bar {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .submit-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+
+        .submit-section h2 {
+            margin-bottom: 1.5rem;
+            color: #1a1a2e;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .about-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .about-content h2 {
+            color: #1a1a2e;
+            margin-bottom: 1rem;
+        }
+
+        .about-content p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-content {
+                flex-wrap: wrap;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">NFSU School of Law</div>
+            <div class="tagline">National Forensic Sciences University - Academic Research Portal</div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-content">
+            <a href="#home" class="nav-link active" onclick="showSection('home')">Home</a>
+            <a href="#journals" class="nav-link" onclick="showSection('journals')">Journals</a>
+            <a href="#papers" class="nav-link" onclick="showSection('papers')">Research Papers</a>
+            <a href="#newsletter" class="nav-link" onclick="showSection('newsletter')">Newsletter</a>
+            <a href="#submit" class="nav-link" onclick="showSection('submit')">Submit Work</a>
+            <a href="#about" class="nav-link" onclick="showSection('about')">About</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="hero">
+                <h1>Welcome to NFSU Law Review</h1>
+                <p>A student-run platform for legal research, scholarly articles, and academic discourse</p>
+            </div>
+
+            <h2 style="margin-bottom: 1rem; color: #1a1a2e;">Latest Publications</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-category">Research Paper</span>
+                        <span class="card-date">Nov 25, 2025</span>
+                    </div>
+                    <h3>Forensic Evidence in Criminal Proceedings: A Constitutional Analysis</h3>
+                    <p class="card-author">By Priya Sharma, 3rd Year</p>
+                    <p>An in-depth examination of the admissibility and reliability of forensic evidence in Indian courts...</p>
+                    <div class="card-footer">
+                        <button class="btn btn-primary">Read Full Paper</button>
+                        <button class="btn btn-secondary">Download PDF</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-category">Journal Article</span>
+                        <span class="card-date">Nov 20, 2025</span>
+                    </div>
+                    <h3>Digital Privacy Rights Under Article 21: Recent Developments</h3>
+                    <p class="card-author">By Rahul Mehta, 4th Year</p>
+                    <p>Exploring the evolving jurisprudence on digital privacy following landmark Supreme Court judgments...</p>
+                    <div class="card-footer">
+                        <button class="btn btn-primary">Read Article</button>
+                        <button class="btn btn-secondary">Cite</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-category">Newsletter</span>
+                        <span class="card-date">Nov 15, 2025</span>
+                    </div>
+                    <h3>NFSU Law Review - November 2025 Edition</h3>
+                    <p class="card-author">Editorial Team</p>
+                    <p>Monthly roundup featuring recent case analyses, student achievements, and upcoming events...</p>
+                    <div class="card-footer">
+                        <button class="btn btn-primary">Read Newsletter</button>
+                        <button class="btn btn-secondary">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Journals Section -->
+        <section id="journals" class="section">
+            <h2 style="margin-bottom: 1.5rem; color: #1a1a2e;">Law Journals</h2>
+            
+            <div class="search-bar">
+                <input type="text" placeholder="Search journals by title, author, or keywords..." id="journalSearch">
+                <div class="filters">
+                    <button class="filter-btn active">All</button>
+                    <button class="filter-btn">Constitutional Law</button>
+                    <button class="filter-btn">Criminal Law</button>
+                    <button class="filter-btn">Cyber Law</button>
+                    <button class="filter-btn">Forensic Science</button>
+                    <button class="filter-btn">International Law</button>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-category">Constitutional Law</span>
+                        <span class="card-date">Nov 2025</span>
+                    </div>
+                    <h3>The Intersection of Forensic Science and Fundamental Rights</h3>
+                    <p class="card-author">By Ananya Desai, 5th Year</p>
+                    <p>This journal examines how the application of forensic techniques must balance investigative needs with constitutional protections...</p>
+                    <div class="card-footer">
+                        <button class="btn btn-primary">Read Journal</button>
+                        <button class="btn btn-secondary">Download PDF</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-category">Criminal Law</span>
+                        <span class="card-date">Oct 2025</span>
+                    </div>
+                    <h3>DNA Evidence and the Presumption of Innocence</h3>
+                    <p class="card-author">By Vikram Singh, 4th Year</p>
+                    <p>Analyzing the impact of DNA profiling on criminal justice and its implications for the burden of proof...</p>
+                    <div class="card-footer">
+                        <button class="btn btn-primary">Read Journal</button>
+                        <button class="btn btn-secondary">Download PDF</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-category">Cyber Law</span>
+                        <span class="card-date">Sep 2025</span>
+                    </div>
+                    <h3>Blockchain Technology and Legal Evidence</h3>
+                    <p class="card-author">By Sneha Patel, 3rd Year</p>
+                    <p>Exploring how blockchain-based evidence is transforming documentation and verification in legal proceedings...</p>
+                    <div class="card-footer">
+                        <button class="btn btn-primary">Read Journal</button>
+                        <button class="btn btn-secondary">Download PDF</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Research Papers Section -->
+        <section id="papers" class="section">
+            <h2 style="margin-bottom: 1.5rem; color: #1a1a2e;">Research Papers</h2>
+            
+            <div class="search-bar">
+                <input type="text" placeholder="Search research papers..." id="paperSearch">
+                <div class="filters">
+                    <button class="filter-btn active">All Papers</button>
+                    <button class="filter-btn">Recent</button>
+                    <button class="filter-btn">Most Cited</button>
+                    <button class="filter-btn">Peer Reviewed</button>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-category">Forensic Science</span>
+                        <span class="card-date">Nov 18, 2025</span>
+                    </div>
+                    <h3>Comparative Analysis of Forensic Standards: India vs. International Practices</h3>
+                    <p class="card-author">By Arjun Kumar, 5th Year</p>
+                    <p>A comprehensive study comparing Indian forensic science standards with international best practices in evidence collection and analysis...</p>
+                    <div class="card-footer">
+                        <button class="btn btn-primary">Read Paper</button>
+                        <button class="btn btn-secondary">Download</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-category">Criminal Procedure</span>
+                        <span class="card-date">Nov 10, 2025</span>
+                    </div>
+                    <h3>Admissibility of Electronic Evidence in Indian Courts</h3>
+                    <p class="card-author">By Meera Iyer, 4th Year</p>
+                    <p>Examining the legal framework governing electronic evidence and challenges in authentication and presentation...</p>
+                    <div class="card-footer">
+                        <button class="btn btn-primary">Read Paper</button>
+                        <button class="btn btn-secondary">Download</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-category">Human Rights</span>
+                        <span class="card-date">Nov 5, 2025</span>
+                    </div>
+                    <h3>Balancing Public Safety and Individual Liberty in Surveillance Laws</h3>
+                    <p class="card-author">By Karthik Reddy, 3rd Year</p>
+                    <p>An analysis of surveillance legislation through the lens of privacy rights and state security interests...</p>
+                    <div class="card-footer">
+                        <button class="btn btn-primary">Read Paper</button>
+                        <button class="btn btn-secondary">Download</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <section id="newsletter" class="section">
+            <h2 style="margin-bottom: 1.5rem; color: #1a1a2e;">NFSU Law Newsletter</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-category">Newsletter</span>
+                        <span class="card-date">November 2025</span>
+                    </div>
+                    <h3>NFSU Law Review - November Edition</h3>
+                    <p><strong>In This Issue:</strong></p>
+                    <p>• Student Spotlight: Interview with Moot Court Champions<br>
+                    • Recent Supreme Court Judgments Analysis<br>
+                    • Faculty Publications Round-up<br>
+                    • Upcoming Seminars and Conferences</p>
+                    <div class="card-footer">
+                        <button class="btn btn-primary">Read Newsletter</button>
+                        <button class="btn btn-secondary">Archive</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-category">Newsletter</span>
+                        <span class="card-date">October 2025</span>
+                    </div>
+                    <h3>NFSU Law Review - October Edition</h3>
+                    <p><strong>Featured Content:</strong></p>
+                    <p>• Forensic Science Week Highlights<br>
+                    • New Publications from Student Researchers<br>
+                    • Career Opportunities in Legal Forensics<br>
+                    • Alumni Success Stories</p>
+                    <div class="card-footer">
+                        <button class="btn btn-primary">Read Newsletter</button>
+                        <button class="btn btn-secondary">Archive</button>
+                    </div>
+                </div>
+
+                <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <h3 style="color: white;">Subscribe to Our Newsletter</h3>
+                    <p style="color: rgba(255,255,255,0.9);">Get monthly updates on latest research, events, and publications directly in your inbox.</p>
+                    <div class="form-group">
+                        <input type="email" placeholder="Enter your email" style="width: 100%; padding: 0.75rem; border: none; border-radius: 5px; margin-bottom: 1rem;">
+                        <button class="btn btn-secondary" style="width: 100%;">Subscribe Now</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Submit Section -->
+        <section id="submit" class="section">
+            <div class="submit-section">
+                <h2>Submit Your Work</h2>
+                <p style="margin-bottom: 2rem; color: #64748b;">Share your research, articles, or contributions with the NFSU Law community.</p>
+                
+                <form id="submitForm">
+                    <div class="form-group">
+                        <label>Submission Type *</label>
+                        <select required>
+                            <option value="">Select type...</option>
+                            <option>Research Paper</option>
+                            <option>Journal Article</option>
+                            <option>Newsletter Article</option>
+                            <option>Case Analysis</option>
+                            <option>Book Review</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Title *</label>
+                        <input type="text" required placeholder="Enter the title of your work">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Author Name *</label>
+                        <input type="text" required placeholder="Your full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Year & Program *</label>
+                        <input type="text" required placeholder="e.g., 3rd Year, B.A. LL.B.">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" required placeholder="your.email@nfsu.ac.in">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Abstract *</label>
+                        <textarea required placeholder="Provide a brief abstract of your work (250-300 words)"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Keywords</label>
+                        <input type="text" placeholder="Comma-separated keywords">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Document Upload *</label>
+                        <input type="file" required accept=".pdf,.doc,.docx">
+                        <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem;">Accepted formats: PDF, DOC, DOCX (Max 10MB)</p>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1rem;">Submit for Review</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section">
+            <div class="about-content">
+                <h2>About NFSU Law Review</h2>
+                <p>The NFSU School of Law Academic Research Portal is a student-run initiative dedicated to promoting legal scholarship, research, and academic discourse within the National Forensic Sciences University community and beyond.</p>
+
+                <h2 style="margin-top: 2rem;">Our Mission</h2>
+                <p>We aim to provide a platform for students, faculty, and legal professionals to publish high-quality research papers, journal articles, and newsletters that contribute to the advancement of legal education and forensic sciences.</p>
+
+                <h2 style="margin-top: 2rem;">Editorial Board</h2>
+                <p>Our editorial board consists of faculty advisors and senior students who review all submissions to ensure academic rigor and quality standards are maintained.</p>
+
+                <h2 style="margin-top: 2rem;">Contact Us</h2>
+                <p><strong>Email:</strong> lawreview@nfsu.ac.in<br>
+                <strong>Address:</strong> NFSU School of Law, National Forensic Sciences University, Gandhinagar, Gujarat<br>
+                <strong>Phone:</strong> +91-XXXX-XXXXXX</p>
+
+                <h2 style="margin-top: 2rem;">Submission Guidelines</h2>
+                <p>All submissions must be original work and should follow our formatting guidelines. Papers undergo a double-blind peer review process. For detailed guidelines, please refer to our Submission Guidelines document or contact the editorial team.</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 NFSU School of Law - Academic Research Portal</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">National Forensic Sciences University | All Rights Reserved</p>
+    </footer>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Remove active class from all nav links
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked nav link
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Handle form submission
+        document.getElementById('submitForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your submission! Our editorial team will review your work and contact you within 7-10 business days.');
+            this.reset();
+        });
+
+        // Search functionality
+        document.getElementById('journalSearch')?.addEventListener('input', function(e) {
+            console.log('Searching journals:', e.target.value);
+        });
+
+        document.getElementById('paperSearch')?.addEventListener('input', function(e) {
+            console.log('Searching papers:', e.target.value);
+        });
+
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
