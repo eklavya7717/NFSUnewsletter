@@ -31,6 +31,44 @@ continue — the capture below pinpoints why.
 
 ---
 
+## Step 0.5 — "I can't see the module toggle at all"
+
+The row **"Wireless through the stereo's Bluetooth module (experimental)"** is hidden unless **both**
+conditions hold (`app/.../ui/settings/SettingsPages.kt`):
+
+1. **Settings › Show advanced** is **ON**, and
+2. CarLink's probe classified your stereo as a module — `classification.blocksWireless == true`
+   (`ZLINK_DAEMON`, `FYT_MODULE`, `ZJ_SOCKET`, or `EXTERNAL_UNKNOWN`). If it's `NONE`, CarLink thinks
+   your stereo uses normal Android Bluetooth and hides the row (and the Home Bluetooth chip too).
+
+**Checklist, in order:**
+
+1. **Turn on Show advanced** (Settings), then look under **Connection**. This is the most common miss.
+2. **Check your CarLink version** (Settings › About) — update to the latest release if it's old; the
+   feature only exists in recent builds.
+3. **Open Diagnostics › Share log** and read the line `External Bluetooth probe: classification=…`:
+   - **`NONE`** → CarLink sees ordinary Android Bluetooth. Either (a) your stereo really does use
+     Android's Bluetooth — just try **plain wireless CarPlay (Wi-Fi Direct)**, no module route needed;
+     or (b) it's a module stereo CarLink didn't recognize — capture the markers below so detection can
+     be added.
+   - **`LIKELY_FALSE_POSITIVE`** → module markers were found, but a phone is bonded to Android's own
+     adapter with a real address, so CarLink treats the markers as a false alarm. Forget the phone in
+     Android's Bluetooth settings, fully relaunch CarLink, and re-check.
+   - **`ZLINK_DAEMON` / `FYT_MODULE` / `ZJ_SOCKET` / `EXTERNAL_UNKNOWN`** → it *is* detected; the row
+     is hidden only because **Show advanced is off** or the **app is too old**. Fix those.
+4. The probe runs **once per app launch** — fully close and reopen CarLink after any change.
+
+**ADB: see what the probe sees (why it said `NONE`):**
+```sh
+adb shell getprop | grep -Ei 'zlink|zj\.bt|fyt\.bluetooth'          # rw.zlink.bt.type / rw.zj.bt.type / sys.fyt.bluetooth_type
+adb shell 'ls -l /dev/rf_serial /dev/zj_bt_serial /dev/auto_serial 2>/dev/null'
+adb shell 'cat /proc/net/tcp | grep -i :0C50'                       # 0x0C50 = 3152 (ZLink daemon listening?)
+```
+All empty/absent and nothing on `:3152` → your stereo likely uses Android Bluetooth (try plain
+wireless), or the module exposes markers CarLink doesn't know yet (report them via Diagnostics).
+
+---
+
 ## Step 1 — Identify your module type (decides which route runs)
 
 CarLink classifies the stereo as `ZLINK_DAEMON`, `FYT_MODULE`, `ZJ_SOCKET`, or `EXTERNAL_UNKNOWN`.
