@@ -4,47 +4,44 @@ Practical setup guide for **[CarLink](https://github.com/F-e-n-y-x/CarLink)** (F
 AGPL-3.0) — "CarPlay and Android Auto in one app, for any Android car stereo." Written for a
 head unit whose stock app is **CarbitLink / ZLink** (a ZLink-type unit).
 
-Everything here is drawn from CarLink's own documentation
-([README](https://github.com/F-e-n-y-x/CarLink#readme),
+Grounded in CarLink's own docs **and its source** (v1.0.15):
+[README](https://github.com/F-e-n-y-x/CarLink#readme),
 [User guide](https://github.com/F-e-n-y-x/CarLink/blob/main/docs/USER_GUIDE.md),
 [Troubleshooting](https://github.com/F-e-n-y-x/CarLink/blob/main/docs/TROUBLESHOOTING.md),
-[External Bluetooth modules](https://github.com/F-e-n-y-x/CarLink/blob/main/design/EXTERNAL_BLUETOOTH.md)).
+[External Bluetooth modules](https://github.com/F-e-n-y-x/CarLink/blob/main/design/EXTERNAL_BLUETOOTH.md).
+
+> **Companion doc:** if wireless CarPlay doesn't start on your unit, see
+> **[CARLINK_WIRELESS_MODULE_PORT.md](CARLINK_WIRELESS_MODULE_PORT.md)** — how to verify the
+> module route and capture CarbitLink's real handshake to fix it.
 
 ---
 
 ## TL;DR
 
-1. **Download the official release APK** onto the stereo (or a PC, then copy by USB).
-   Do **not** build it yourself — see [Why you must use the release](#why-the-official-release-apk-and-not-a-build).
-2. **Install it on the head unit** (Android 7.1+), not on your phone.
-3. **Connect by USB cable first.** This gives you full CarPlay and Android Auto and is
-   **unaffected** by the stereo's Bluetooth limitation.
-4. **Wireless CarPlay will most likely NOT work on this stereo** — its Bluetooth is a separate
-   vendor module that apps cannot use for CarPlay. This is a hardware/firmware wall, not a setup
-   mistake. USB is the reliable path, identical experience.
+1. **Install the official release APK** (≥ v1.0.15) on the head unit — Android 7.1+. Do **not**
+   build from source: a source build **can't do CarPlay** (no auth files). See
+   [Why the release](#why-the-official-release-apk-and-not-a-build).
+2. **USB cable = guaranteed, full CarPlay/Android Auto.** Try this first to confirm everything works.
+3. **Wireless CarPlay through your stereo's Bluetooth module is now implemented** in CarLink (v1.0.15,
+   *experimental*). Turn on **Settings › Connection › Show advanced › "Wireless through the stereo's
+   Bluetooth module (experimental)"** and try it. It is **unverified on real ZLink daemons**, so it
+   may or may not work on your exact unit — if it doesn't, the port doc shows how to fix it.
 
 ---
 
 ## Install
 
-1. On the stereo's browser (or a computer, then copy the file over by USB stick/cable), open:
+1. On the stereo (or a PC, then copy over by USB), open:
    **https://github.com/F-e-n-y-x/CarLink/releases/latest**
 2. Download **`CarLink-X.Y.Z.apk`**.
-3. *(Optional but recommended)* Verify the download — download the matching
-   `CarLink-X.Y.Z.apk.sha256` from the same release and run:
-   ```sh
-   sha256sum -c CarLink-X.Y.Z.apk.sha256      # prints "CarLink-X.Y.Z.apk: OK"
-   ```
-   The official build is signed with CarLink's release key; certificate SHA-256:
+3. *(Recommended)* Verify: download the matching `.sha256` and run
+   `sha256sum -c CarLink-X.Y.Z.apk.sha256` → `OK`. Release signing cert SHA-256:
    `03:74:68:CA:5B:EB:70:EA:5F:68:54:33:29:B0:33:68:24:7D:FB:39:3D:3F:62:6A:6B:47:2D:10:E5:65:7D:21`
-4. Open the APK on the stereo. Android asks to **"Allow from this source"** (Install unknown
-   apps) — allow it, go back, tap **Install**.
-5. Open CarLink and run first-time setup (**Allow all** permissions → pick car brand / **Other** →
-   pair or plug in).
+4. Open the APK on the stereo → **"Allow from this source"** → **Install**.
+5. Open CarLink, run first-time setup (**Allow all** → car brand / **Other** → pair or plug in).
 
-> **Tip:** [Obtainium](https://github.com/ImranR98/Obtainium) can auto-track CarLink releases —
-> paste `https://github.com/F-e-n-y-x/CarLink` into *Add app*. CarLink also self-updates from
-> GitHub Releases (official build only).
+> [Obtainium](https://github.com/ImranR98/Obtainium) can auto-track releases
+> (`Add app` → `https://github.com/F-e-n-y-x/CarLink`); CarLink also self-updates (official build only).
 
 ---
 
@@ -53,12 +50,11 @@ Everything here is drawn from CarLink's own documentation
 CarLink's troubleshooting is explicit:
 
 > **"CarPlay can't sign in" — This build has no CarPlay authentication files: you are running a
-> build from source. Install the release APK from Releases. Android Auto works either way.**
+> build from source. Install the release APK. Android Auto works either way.**
 
-CarPlay requires Apple authentication material that ships **only** in the official signed release.
-A self-compiled APK (or any APK signed with a different key) **cannot do CarPlay** and cannot
-update the official app. So the earlier "fork the repo and build it" plan does **not** help the
-CarPlay goal — download the release instead.
+CarPlay needs Apple authentication material that ships **only** in the official signed release. A
+self-compiled APK **cannot do CarPlay**. So "fork and build CarLink" does not help the CarPlay
+goal — use the release. (This is also why there was no point building it in a sandbox.)
 
 ---
 
@@ -66,94 +62,82 @@ CarPlay goal — download the release instead.
 
 Plug the iPhone (or Android phone) into the stereo with a good USB cable.
 
-- iPhone → **CarPlay over USB**; Android phone → **Android Auto over USB**. CarLink detects which.
-- Accept **"Use CarPlay"** (or Android Auto's prompts) on the phone; keep it unlocked. First
-  connection can take up to ~30 seconds.
-- **USB CarPlay and USB Android Auto are unaffected** by the Bluetooth-module limitation below.
+- iPhone → **CarPlay over USB**; Android phone → **Android Auto over USB**. CarLink auto-detects.
+- Accept **"Use CarPlay"** on the phone; keep it unlocked. First connect can take ~30 s.
+- **USB is unaffected** by the Bluetooth-module limitation below.
 
-If CarPlay connects over USB but the screen is black with sound (seen on some iPhones on iOS 27):
-**Settings › Display › Direct video output** → *Turn on and reconnect*.
-
-Expected quirk: during USB CarPlay the iPhone may show **"Personal Hotspot"** and Android shows a
-VPN key icon. That is just the local cable link CarPlay needs — no internet, no mobile data spent
-on the stereo.
+Black screen with sound on iOS 27? **Settings › Display › Direct video output** → *Turn on and
+reconnect*. The iPhone showing "Personal Hotspot" during USB CarPlay is normal (local cable link, no
+internet).
 
 ---
 
-## Wireless — the honest situation for a ZLink/CarbitLink unit
+## Wireless on a ZLink/CarbitLink unit — the real situation
 
-**CarPlay, wirelessly: almost certainly not available on this stereo.**
+**Why wireless is hard here:** cheap Android stereos (FYT and **ZLink-type units** — yours) don't use
+Android's Bluetooth for phones. Their Bluetooth is a **separate vendor module on a serial link**; the
+phone pairs with *that*, and Android's own adapter can't reach the phone through it. Both CarPlay
+(iAP2) and Android Auto normally start over Android's Bluetooth — which goes nowhere on these units.
 
-Cheap Android stereos (FYT units, **ZLink-type units** — yours) do **not** use Android's Bluetooth
-for phones. Their Bluetooth is a **separate module on a serial link, driven by vendor firmware**;
-the phone pairs with that module, and Android's own Bluetooth adapter can't reach the phone through
-it. Wireless CarPlay begins with an iAP2 Bluetooth handshake over Android's `BluetoothSocket` —
-and on these stereos **nothing written there reaches the phone**.
+**What CarLink now does about it (v1.0.15):** it carries the wireless handshake *through* the module.
+Two routes are implemented, picked automatically from what the module looks like:
 
-CarLink detects this and refuses before it fails confusingly, showing:
+- **ZBT** — ZLink-type daemon on TCP `127.0.0.1:3152` (likely your CarbitLink unit).
+- **FYT BLINK / rf_serial** — FYT's module over `/dev/rf_serial` or `/dev/auto_serial`.
 
-> **"Wireless isn't available on this stereo yet."** This stereo's Bluetooth is a separate module
-> run by the stereo's own firmware (common on FYT and ZLink-type units), and apps cannot use it…
-> Connect the phone with a USB cable; it works the same.
+This covers **both Android Auto and CarPlay** (the published Troubleshooting page still says "CarPlay
+is not covered" — that text lags the code; the source and CHANGELOG confirm CarPlay is wired in).
 
-Re-pairing or toggling Bluetooth does **not** help. **This is the definitive answer to "will
-wireless work?" — for CarPlay on a ZLink module, no.** Use USB.
+**How to turn it on:**
 
-### Wireless Android Auto — one experimental thing to try (Android phones only)
+1. **Settings › Connection › Show advanced › "Wireless through the stereo's Bluetooth module
+   (experimental)"** → ON. (CarLink often auto-detects the module and enables it; the toggle is also
+   on the Bluetooth chip on Home.)
+2. **On an FYT stereo only:** disable the stock **"Car Link"** app (`com.syu.carlink`) in Android
+   Settings › Apps — it owns the same serial port. (ZLink daemon units don't need this.)
+3. Pair the iPhone from the phone's Bluetooth settings (to the module), then tap **Connect**.
 
-CarLink has **ported** the wireless-handshake routes for these modules from upstream
-`open-headunit` 3.5.0 into its Android Auto engine (the "hacker route" from our earlier
-discussion — already done by the project, not something you need to build):
+**The honest caveat — it may not work on your exact unit.** From CarLink's own source comments:
+the ZBT CarPlay path is *"a hypothesis, so far verified only against an emulated daemon"*, and the
+FYT path's protocol was *"read from FYT's own CarPlay, not yet tried on a unit."* So treat it as a
+real attempt that might fail on real hardware. **If it fails → [the port doc](CARLINK_WIRELESS_MODULE_PORT.md)**
+tells you exactly what to capture to make it work (usually a single protocol value).
 
-- **ZBT** (ZLink-type modules) — talks to the module daemon on `127.0.0.1:3152`.
-- **BLINK** (FYT's DUDUAUTO module) — talks over `/dev/auto_serial`.
-
-It's exposed as **Settings › Connection › Show advanced › "Wireless through the stereo's Bluetooth
-module (experimental)"** (shown only on such stereos). Caveats, straight from the docs:
-
-- **Off by default, and "not yet verified on a real stereo."**
-- **Android Auto only — CarPlay is not covered.** So this does nothing for an iPhone.
-- On FYT units you must first disable the stock `com.syu.carlink` app (Android Settings › Apps),
-  because it owns the same serial port. (ZLink units use a different route.)
-
-If you have an Android phone, you can try it; if it's an iPhone, skip it and use USB.
-
-### Help get your stereo supported
-
-CarLink's **Diagnostics › Report on GitHub** (or *Share log* →
-[open an issue](https://github.com/F-e-n-y-x/CarLink/issues/new/choose)) sends a hardware probe
-(module classification, serial-port nodes, system properties, the `127.0.0.1:3152` daemon check,
-installed stock apps) that tells the maintainer **which module route your specific stereo needs**.
-This is the realistic path to wireless being added for your unit.
+**If it doesn't work and you don't want to debug:** USB cable gives you full CarPlay today.
 
 ---
 
 ## Quick decision tree
 
 ```
-Do you want CarPlay (iPhone)?
-├─ Yes → Use the official release APK, connect by USB cable.  ✅ Works.
-│        Wireless CarPlay on a ZLink/CarbitLink stereo → not available. Use USB.
-│
-└─ Android Auto (Android phone)?
-   ├─ USB cable            → ✅ Works.
-   └─ Wireless (optional)  → Try Settings › Connection › Show advanced →
-                             "Wireless through the stereo's Bluetooth module (experimental)".
-                             Unverified; FYT units must disable com.syu.carlink first.
+iPhone / CarPlay:
+  USB cable                         → ✅ Works now.
+  Wireless (Settings → module route)→ ⚠️ Experimental; try it. If "module didn't answer" or it
+                                        won't start → capture the handshake (port doc) → fixable.
+
+Android phone / Android Auto:
+  USB cable                         → ✅ Works now.
+  Wireless (same module toggle)     → ⚠️ Experimental (ZBT/ZJ_SOCKET/BLINK); try it.
 ```
+
+---
+
+## Help get your unit officially supported
+
+CarLink's **Diagnostics › Report on GitHub** (or *Share log* →
+[new issue](https://github.com/F-e-n-y-x/CarLink/issues/new/choose)) attaches a hardware probe
+(module classification, serial-port nodes, system properties, the `127.0.0.1:3152` check, stock
+apps). That is the fastest route to getting your specific stereo verified/fixed upstream.
 
 ---
 
 ## Requirements recap
 
-- **Display:** Android **7.1+** (API 25) on ARM (`arm64-v8a` / `armeabi-v7a`) — your car stereo.
-  Install CarLink **there**, not on your phone.
-- **Phone:** iPhone (CarPlay) or Android phone (Android Auto); a USB cable, or Bluetooth + Wi-Fi
-  for wireless.
+- **Display:** Android **7.1+** (API 25), ARM — your stereo. Install CarLink **there**, not the phone.
+- **Phone:** iPhone (CarPlay) or Android (Android Auto); USB cable, or BT+Wi-Fi for wireless.
 - **Package:** `com.carlink.app`, signed with CarLink's release key (fingerprint above).
 
 ---
 
-*This guide summarizes CarLink's published documentation for convenience. CarLink is third-party
-software (AGPL-3.0); it is not affiliated with this repository. Always verify the APK you install
-as described above.*
+*Summarizes CarLink's published docs and source for convenience. CarLink is third-party software
+(AGPL-3.0), not affiliated with this repository. Always verify the APK before installing.*
